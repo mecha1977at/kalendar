@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendar Widget</title>
+    <link rel="stylesheet" href="styles/styles.css" />
+  </head>
+  <body>
+    <div class="calendar-wrapper">
+      <div class="info-section">
+        <h2>30 Minute Meeting</h2>
+        <p class="subtitle">Meet me right here</p>
+        <div class="info-details">
+          <div class="detail-item">
+            <span class="icon calendar-icon">&#128197;</span>
+            <span id="selectedDate">Friday, October 4</span>
+          </div>
+          <div class="detail-item">
+            <span class="icon clock-icon">&#128339;</span>
+            <span>30 Minutes</span>
+          </div>
+          <div class="detail-item">
+            <span class="icon video-icon">&#127909;</span>
+            <span>Google Meet</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="separator"></div>
+
+      <div class="calendar-section">
+        <div class="calendar-header">
+          <span id="monthYear"></span>
+          <div class="calendar-nav">
+            <button id="prevMonth">&lt;</button>
+            <button id="nextMonth">&gt;</button>
+          </div>
+        </div>
+        <div class="calendar-grid" id="calendar">
+          <!-- Days will be dynamically generated here -->
+        </div>
+      </div>
+
+      <div class="separator"></div>
+
+      <div class="time-selection-section">
+        <div class="time-header">
+          <span id="weekday"></span>
+        </div>
+        <ul id="timeSlots">
+          <!-- Time slots will be populated here -->
+        </ul>
+      </div>
+    </div>
+
+    <div id="popup" class="popup hidden">
+      <div class="popup-content">
+        <h3>Confirm Appointment</h3>
+        <p id="confirmDate"></p>
+        <label for="message">Add a Message:</label>
+        <textarea id="message" rows="4"></textarea>
+        <div class="popup-buttons">
+          <button id="confirmBtn">Confirm</button>
+          <button id="cancelBtn">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <script defer src="scripts/script.js"></script>
+  </body>
+</html>
