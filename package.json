@@ -1,0 +1,20 @@
+{
+    "name": "eleventy-calendar",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "eleventy --serve",
+        "build": "eleventy"
+    },
+    "dependencies": {
+        "@11ty/eleventy": "^3.0.0",
+        "@11ty/eleventy-fetch": "^4.0.1"
+    },
+    "devDependencies": {
+        "netlify-cms-app": "^2.15.72"
+    },
+    "main": ".eleventy.js",
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": ""
+}
