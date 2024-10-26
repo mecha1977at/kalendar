@@ -1,0 +1,24 @@
+{
+  "appointment": [
+    {
+      "date": "2024-10-21",
+      "time": "16.30",
+      "message": "demo"
+    },
+    {
+      "date": "2024-10-18",
+      "time": "10:30",
+      "message": "Demo appointment"
+    },
+    {
+      "date": "2024-11-25",
+      "time": "15:30",
+      "message": "test anzeige "
+    },
+    {
+      "date": "2024-10-26",
+      "time": "19:30",
+      "message": "ewrtzewrtwertwert"
+    }
+  ]
+}
