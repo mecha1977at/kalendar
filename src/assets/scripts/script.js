@@ -68,16 +68,14 @@ function renderCalendar() {
     const formattedDate = `${year}-${(month + 1)
       .toString()
       .padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-    const isBooked = bookedAppointments.some((appt) =>
-      appt.date.startsWith(formattedDate),
+
+    // Check if the day has any booked appointments
+    const hasBookedAppointments = bookedAppointments.some(
+      (appt) => appt.date === formattedDate,
     );
 
-    if (!isBooked) {
-      dayDiv.classList.add('available');
-      dayDiv.addEventListener('click', (event) => selectDate(event, day));
-    } else {
-      dayDiv.classList.add('booked');
-    }
+    dayDiv.classList.add('available');
+    dayDiv.addEventListener('click', (event) => selectDate(event, day));
     calendar.appendChild(dayDiv);
   }
 }
@@ -101,11 +99,11 @@ function renderTimeSlots(selectedDate) {
     const li = document.createElement('li');
     li.textContent = slot;
 
-    if (!checkIfSlotIsBooked(selectedDate, slot)) {
-      li.addEventListener('click', () => selectTimeSlot(slot));
-    } else {
+    if (checkIfSlotIsBooked(selectedDate, slot)) {
       li.classList.add('unavailable');
       li.style.pointerEvents = 'none';
+    } else {
+      li.addEventListener('click', () => selectTimeSlot(slot));
     }
     timeSlots.appendChild(li);
   });
