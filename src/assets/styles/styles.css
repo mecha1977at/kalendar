@@ -14,6 +14,7 @@ body {
     border-radius: 10px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     max-width: 1000px;
+    height: 350px;
 }
 
 .info-section {
@@ -68,11 +69,18 @@ body {
     background-color: #0056b3;
 }
 
-.calendar-grid {
+.calendar-grid,
+span#weekday {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 5px;
     margin-bottom: 15px;
+}
+
+span.weekday {
+    text-align: center;
+    font-weight: 700;
+    font-size: 20px;
 }
 
 .day {
