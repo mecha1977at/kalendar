@@ -251,7 +251,7 @@ confirmBtn.addEventListener('click', () => {
   console.log('New appointment:', newAppointment); // Debug-Ausgabe für den neuen Termin
 
   // Sende den neuen Termin an Git Gateway zur Speicherung in appointments.json
-  fetch('/.netlify/functions/appointments.js', {
+  fetch('/.netlify/functions-internal/appointments.js', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
