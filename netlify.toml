@@ -2,11 +2,6 @@
  functions = "netlify/functions"
   command = "npx @11ty/eleventy"
   publish = "_site"
-
-[[redirects]]
-  from = "/admin"
-  to = "/admin/"
-  status = 200
   
 [[redirects]]
   from = "/api/*"
