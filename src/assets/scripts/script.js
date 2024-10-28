@@ -237,40 +237,33 @@ function selectTimeSlot(slot) {
   popup.classList.remove('hidden'); // * Popup sichtbar machen
 }
 
-// Event-Listener für die Bestätigung eines Termins
-confirmBtn.addEventListener('click', () => {
-  console.log('Confirming appointment...'); // ? Debug-Ausgabe für Terminbestätigung
-  const bookedDate = selectedDate.toISOString().split('T')[0]; // * Ausgewähltes Datum parsen
-  const message = messageEl.value; // * Nachricht des Benutzers erhalten
+confirmBtn.addEventListener('click', function () {
+  // Prüfe, ob alle notwendigen Felder vorhanden sind
+  if (!selectedDate || !selectedTimeSlot || !messageEl.value) {
+    alert(
+      'Bitte füllen Sie alle Felder aus oder stellen Sie sicher, dass Datum und Zeit ausgewählt wurden.',
+    );
+    return; // Beende die Funktion, wenn Daten fehlen
+  }
 
-  const newAppointment = {
-    date: bookedDate,
-    time: selectedTimeSlot,
-    message: message, // * Termin-Details speichern
-  };
-  console.log('New appointment:', newAppointment); // ? Debug-Ausgabe für den neuen Termin
-  bookedAppointments.push(newAppointment); // * Neuen Termin zur Liste der gebuchten Termine hinzufügen
+  // Extrahiere die ausgewählten Werte
+  const date = selectedDate.toISOString().split('T')[0]; // Format YYYY-MM-DD
+  const time = selectedTimeSlot;
+  const message = messageEl.value;
 
-  // * Neuen Termin in _data/appointments.json speichern
-  fetch('./_data/appointments.json', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(newAppointment),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Fehler beim Speichern des Termins');
-      }
-      console.log('Termin erfolgreich gespeichert');
-    })
-    .catch((error) => {
-      console.error('Fehler:', error);
-    });
+  // URL-Parameter erstellen, um die Felder zu füllen
+  const urlParams = new URLSearchParams({
+    'appointment.date': date,
+    'appointment.time': time,
+    'appointment.message': message,
+  });
 
-  renderCalendar(); // * Kalender neu rendern, um die Aktualisierungen anzuzeigen
-  popup.classList.add('hidden'); // * Popup wieder ausblenden
+  // Öffne DecapCMS im neuen Eintrag mit den vorgefüllten Daten
+  const cmsUrl = `/admin/#/collections/appointments/new?${urlParams.toString()}`;
+  window.location.href = cmsUrl; // Oder öffne es in einem neuen Tab: window.open(cmsUrl, '_blank');
+
+  // Schließe das Pop-up
+  popup.classList.add('hidden');
 });
 
 // Event-Listener zum Abbrechen eines Termins
