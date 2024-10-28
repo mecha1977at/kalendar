@@ -251,7 +251,7 @@ confirmBtn.addEventListener('click', () => {
   };
 
   // Sende die Daten an die Netlify Function, um sie dauerhaft zu speichern
-  fetch('/.netlify/functions/update-appointments', {
+  fetch('/.netlify/functions/update-appointments.js', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
