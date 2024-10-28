@@ -239,22 +239,23 @@ function selectTimeSlot(slot) {
 
 // Event-Listener für die Bestätigung eines Termins
 confirmBtn.addEventListener('click', () => {
-  console.log('Confirming appointment...');
+  console.log('Confirming appointment...'); // Debug-Ausgabe für Terminbestätigung
+  const bookedDate = selectedDate.toISOString().split('T')[0]; // Ausgewähltes Datum parsen
+  const message = messageEl.value; // Nachricht des Benutzers erhalten
 
-  // Sammle alle Daten, die bereits im Popup verfügbar sind
-  const bookedDate = selectedDate.toISOString().split('T')[0];
-  const message = messageEl.value; // Eingabe aus dem Popup
   const newAppointment = {
     date: bookedDate,
     time: selectedTimeSlot,
-    message: message,
+    message: message, // Termin-Details speichern
   };
+  console.log('New appointment:', newAppointment); // Debug-Ausgabe für den neuen Termin
 
-  // Sende die Daten an die Netlify Function, um sie dauerhaft zu speichern
-  fetch('/.netlify/functions/update-appointments.js', {
+  // Sende den neuen Termin an Git Gateway zur Speicherung in appointments.json
+  fetch('/.netlify/functions/appointments.js', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer <YOUR_GIT_GATEWAY_TOKEN>', // Token hinzufügen
     },
     body: JSON.stringify(newAppointment),
   })
@@ -263,14 +264,14 @@ confirmBtn.addEventListener('click', () => {
         throw new Error('Fehler beim Speichern des Termins');
       }
       console.log('Termin erfolgreich gespeichert');
-      // Neuen Termin lokal hinzufügen
-      bookedAppointments.push(newAppointment);
-      renderCalendar(); // Kalender neu rendern, um den neuen Termin zu zeigen
-      popup.classList.add('hidden'); // Popup wieder ausblenden
     })
     .catch((error) => {
       console.error('Fehler:', error);
     });
+
+  bookedAppointments.push(newAppointment); // Neuen Termin zur Liste der gebuchten Termine hinzufügen
+  renderCalendar(); // Kalender neu rendern, um die Aktualisierungen anzuzeigen
+  popup.classList.add('hidden'); // Popup wieder ausblenden
 });
 
 // Event-Listener zum Abbrechen eines Termins

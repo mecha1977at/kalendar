@@ -8,9 +8,6 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({
     './src/favicon.ico': '/favicon.ico',
   });
-  eleventyConfig.addPassthroughCopy({
-    './src/netlify/functions/': '/.netlify/functions/',
-  });
   eleventyConfig.addPassthroughCopy('admin');
 
   return {
