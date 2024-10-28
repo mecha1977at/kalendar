@@ -236,9 +236,56 @@ function selectTimeSlot(slot) {
   )} um ${slot}`; // * Bestätigungsnachricht anzeigen
   popup.classList.remove('hidden'); // * Popup sichtbar machen
 }
+// Funktion zum Speichern der kombinierten Termine auf dem Server
+function saveAppointmentsToServer() {
+  // Hole bestehende Termine aus appointments.json
+  fetch('_data/appointments.json')
+    .then((response) => response.json())
+    .then((data) => {
+      let existingAppointments = data.appointment || [];
 
+      // Hole neue Termine aus dem sessionStorage
+      let newAppointments =
+        JSON.parse(sessionStorage.getItem('appointments'))?.appointment || [];
+
+      // Kombiniere beide Terminlisten
+      let combinedAppointments = existingAppointments.concat(newAppointments);
+
+      // Sende die kombinierte Liste an den Server
+      fetch('http://localhost:3000/update-appointments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ appointment: combinedAppointments }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+              'Fehler beim Aktualisieren der Termine auf dem Server',
+            );
+          }
+          return response.text();
+        })
+        .then((result) => {
+          console.log(
+            'Termine erfolgreich auf dem Server aktualisiert:',
+            result,
+          );
+          alert('Termine erfolgreich aktualisiert!');
+        })
+        .catch((error) => {
+          console.error('Fehler beim Senden der Daten:', error);
+        });
+    })
+    .catch((error) => {
+      console.error('Fehler beim Abrufen der Termine:', error);
+    });
+}
+
+// Event-Listener für die Bestätigung eines Termins
 confirmBtn.addEventListener('click', function () {
-  // Prüfe, ob alle notwendigen Felder vorhanden sind
+  // Verwende das bereits gespeicherte ausgewählte Datum und den ausgewählten Zeit-Slot
   if (!selectedDate || !selectedTimeSlot || !messageEl.value) {
     alert(
       'Bitte füllen Sie alle Felder aus oder stellen Sie sicher, dass Datum und Zeit ausgewählt wurden.',
@@ -246,22 +293,52 @@ confirmBtn.addEventListener('click', function () {
     return; // Beende die Funktion, wenn Daten fehlen
   }
 
-  // Extrahiere die ausgewählten Werte
-  const date = selectedDate.toISOString().split('T')[0]; // Format YYYY-MM-DD
-  const time = selectedTimeSlot;
-  const message = messageEl.value;
+  // Hole vorhandene Termine aus dem sessionStorage (falls vorhanden)
+  let appointments =
+    JSON.parse(sessionStorage.getItem('appointments'))?.appointment || [];
 
-  // URL-Parameter erstellen, um die Felder zu füllen
-  const urlParams = new URLSearchParams({
-    'appointment.date': date,
-    'appointment.time': time,
-    'appointment.message': message,
-  });
+  // Erstelle ein neues Termin-Objekt
+  const newAppointment = {
+    date: selectedDate.toISOString().split('T')[0], // Verwende das ausgewählte Datum im Format YYYY-MM-DD
+    time: selectedTimeSlot.replace(':', '.'), // Verwende das ausgewählte Zeit-Slot und formatiere es passend zur JSON-Datei
+    message: messageEl.value, // Verwende die eingegebene Nachricht
+  };
 
-  // Öffne DecapCMS im neuen Eintrag mit den vorgefüllten Daten
-  const cmsUrl = `/admin/#/collections/appointments/new?${urlParams.toString()}`;
-  window.location.href = cmsUrl; // Oder öffne es in einem neuen Tab: window.open(cmsUrl, '_blank');
+  // Füge den neuen Termin zu der Liste hinzu
+  appointments.push(newAppointment);
 
+  // Speichere die aktualisierte Liste der Termine wieder im sessionStorage
+  sessionStorage.setItem(
+    'appointments',
+    JSON.stringify({ appointment: appointments }),
+  );
+
+  // Zeige den neuen Status in der Konsole (zur Überprüfung)
+  console.log('Updated appointments:', { appointment: appointments });
+
+  // Schließe das Pop-up
+  popup.classList.add('hidden');
+
+  // Speichere die kombinierten Termine auf dem Server
+  saveAppointmentsToServer();
+});
+
+// Beispiel-Funktion, die aufgerufen wird, wenn ein Datum im Kalender ausgewählt wird
+function openPopupForDate(date) {
+  // Setze das Datum im Pop-up und speichere das ausgewählte Datum
+  selectedDate = new Date(date);
+  confirmDateEl.innerText = `Datum: ${selectedDate.toLocaleDateString('de-DE', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+  })}`;
+
+  // Öffne das Pop-up
+  popup.classList.remove('hidden');
+}
+
+// Beispiel für den Event-Handler des "Cancel"-Buttons
+cancelBtn.addEventListener('click', function () {
   // Schließe das Pop-up
   popup.classList.add('hidden');
 });
@@ -306,3 +383,4 @@ setInterval(() => {
       console.error('Es gab ein Problem bei der Abrufoperation:', error);
     });
 }, 60000); // Alle 60 Sekunden prüfen
+sessionStorage.clear();

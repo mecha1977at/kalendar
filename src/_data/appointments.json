@@ -11,14 +11,24 @@
       "message": "Demo appointment"
     },
     {
-      "date": "2024-10-26",
-      "time": "19:30",
-      "message": "ewrtzewrtwertwert"
-    },
-    {
       "date": "2024-11-25",
       "time": "15:30",
       "message": "test anzeige "
+    },
+    {
+      "date": "2024-10-30",
+      "time": "15:00",
+      "message": "demo termin heute nicht"
+    },
+    {
+      "date": "2024-11-27",
+      "time": "11.00",
+      "message": "werqweerqr"
+    },
+    {
+      "date": "2024-11-26",
+      "time": "11.00",
+      "message": "wertweqr"
     }
   ]
 }
